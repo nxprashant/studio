@@ -1,0 +1,715 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Inkcode Labs design tokens — source: design-system/inkcode-labs/MASTER.md
+   Components must use these tokens, never raw hex values.
+------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+  --background: #f7f7f5;
+  --foreground: #0b0f19;
+  --card: #ffffff;
+  --muted: #ededE9;
+  --muted-foreground: #52525b;
+  --border: #e4e4e0;
+  --primary: #0b0f19;
+  --on-primary: #ffffff;
+  --on-accent: #ffffff;
+  --danger: #dc2626;
+
+  --accent-dev: #15803d;
+  --accent-pub: #c2410c;
+  --accent-data: #1d4ed8;
+  --accent: var(--accent-data);
+
+  --shadow-sm: 0 1px 2px rgb(11 15 25 / 0.05);
+  --shadow-md: 0 4px 12px rgb(11 15 25 / 0.06);
+  --shadow-lg: 0 16px 40px rgb(11 15 25 / 0.1);
+  --glow: 0 0 0 1px color-mix(in oklab, var(--accent) 40%, transparent),
+    0 12px 40px color-mix(in oklab, var(--accent) 22%, transparent);
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #0b0f19;
+    --foreground: #f4f4f2;
+    --card: #141925;
+    --muted: #1a2030;
+    --muted-foreground: #a1a1aa;
+    --border: #262c3a;
+    --primary: #f4f4f2;
+    --on-primary: #0b0f19;
+    --on-accent: #0b0f19;
+    --danger: #f87171;
+    --accent-dev: #4ade80;
+    --accent-pub: #fb923c;
+    --accent-data: #60a5fa;
+    --shadow-md: 0 0 0 1px var(--border);
+    --shadow-lg: 0 0 0 1px var(--border);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0b0f19;
+  --foreground: #f4f4f2;
+  --card: #141925;
+  --muted: #1a2030;
+  --muted-foreground: #a1a1aa;
+  --border: #262c3a;
+  --primary: #f4f4f2;
+  --on-primary: #0b0f19;
+  --on-accent: #0b0f19;
+  --danger: #f87171;
+  --accent-dev: #4ade80;
+  --accent-pub: #fb923c;
+  --accent-data: #60a5fa;
+  --shadow-md: 0 0 0 1px var(--border);
+  --shadow-lg: 0 0 0 1px var(--border);
+}
+
+/* Each discipline re-inks the accent. Set on <html> (current chapter) or on any section. */
+[data-discipline="dev"] {
+  --accent: var(--accent-dev);
+}
+[data-discipline="pub"] {
+  --accent: var(--accent-pub);
+}
+[data-discipline="data"] {
+  --accent: var(--accent-data);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+  --color-dev: var(--accent-dev);
+  --color-pub: var(--accent-pub);
+  --color-data: var(--accent-data);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --font-mono: var(--font-code);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+/* ------------------------------------------------------------------ Base */
+@layer base {
+
+html {
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+a,
+button,
+[role="button"],
+summary,
+label[for],
+select {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Smoothly re-ink accent-driven colors when the chapter changes */
+.ink-transition,
+.ink-transition * {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke, transform;
+  transition-duration: 400ms;
+  transition-timing-function: var(--ease-out);
+}
+
+} /* end @layer base */
+
+/* ------------------------------------------------------------------ Type scale */
+@layer components {
+
+.text-display {
+  font-size: clamp(2.6rem, 5.5vw + 1rem, 5.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+.text-h1 {
+  font-size: clamp(2.25rem, 4vw + 1rem, 4rem);
+  font-weight: 700;
+}
+.text-h2 {
+  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------------ Layout */
+
+.container-x {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 32px;
+  }
+}
+@media (min-width: 1280px) {
+  .container-x {
+    padding-inline: 48px;
+  }
+}
+
+.bento {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+}
+@media (min-width: 768px) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .bento {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+/* ------------------------------------------------------------------ Components */
+
+.card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform 220ms var(--ease-out), box-shadow 220ms ease, border-color 220ms ease,
+    background-color 300ms ease;
+}
+.card-interactive:hover,
+.card-interactive:focus-within {
+  transform: translateY(-3px);
+  box-shadow: var(--glow);
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+}
+
+/* Cursor spotlight (coordinates set by MotionProvider on pointer: fine devices) */
+.card-interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--accent) 10%, transparent),
+    transparent 60%
+  );
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.card-interactive:hover::before {
+  opacity: 1;
+}
+
+/* Whole-card click target from one real link */
+.stretched-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: transform 180ms var(--ease-out), box-shadow 220ms ease, background-color 220ms ease,
+    color 220ms ease, border-color 220ms ease;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover {
+  box-shadow: var(--glow);
+}
+.btn-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn-accent:hover {
+  box-shadow: var(--glow);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--foreground);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-code), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--muted-foreground);
+  background: color-mix(in oklab, var(--card) 70%, transparent);
+}
+.chip-toggle {
+  min-height: 40px;
+  padding-inline: 14px;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.chip-toggle:hover {
+  border-color: var(--accent);
+  color: var(--foreground);
+}
+.chip-toggle[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.eyebrow {
+  font-family: var(--font-code), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Small accent or danger text on tinted/muted surfaces: deepened toward the foreground so it clears 4.5:1
+   in both themes while keeping the chapter's hue. */
+.text-ink-strong {
+  color: color-mix(in oklab, var(--accent) 78%, var(--foreground));
+}
+.text-danger-strong {
+  color: color-mix(in oklab, var(--danger) 72%, var(--foreground));
+}
+
+/* Theme toggle icons resolve from CSS, so the button is never blank before hydration. */
+.theme-icon-sun {
+  display: none;
+}
+:root[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-icon-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .theme-icon-moon {
+    display: none;
+  }
+}
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 300ms var(--ease-out), color 200ms ease;
+}
+.link-underline:hover {
+  background-size: 100% 1.5px;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 16px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+.input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+/* Subtle dotted grid used behind the hero */
+.grid-paper {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--foreground) 14%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Cell highlight after the data-cleanse demo runs */
+.cells-flash td {
+  animation: cell-flash 900ms ease-out 150ms both;
+}
+@keyframes cell-flash {
+  from {
+    background-color: color-mix(in oklab, var(--accent) 20%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+} /* end @layer components */
+
+/* ------------------------------------------------------------------ Marquee */
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  padding-right: 12px;
+  animation: marquee 36s linear infinite;
+}
+.marquee[data-paused="true"] .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.marquee-track.reverse {
+  animation-direction: reverse;
+}
+.hover-pause:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--foreground) 55%, transparent);
+  transition: color 300ms ease, -webkit-text-stroke-color 300ms ease;
+}
+.marquee-outline:hover,
+.marquee-outline:focus-visible {
+  color: var(--accent);
+  -webkit-text-stroke-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ Discipline glyphs (hero tiles)
+   Static by default; animate while the tile is hovered/focused or active. */
+
+.glyph {
+  position: relative;
+  width: 64px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.glyph-dev {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.glyph-dev span {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--accent) 75%, transparent);
+  transform-origin: left center;
+}
+.glyph-dev i {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  width: 6px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--accent);
+  opacity: 0.8;
+}
+.group:hover .glyph-dev span,
+.group:focus-visible .glyph-dev span,
+.is-active .glyph-dev span {
+  animation: glyph-type 2.6s var(--ease-out) infinite;
+}
+.group:hover .glyph-dev i,
+.is-active .glyph-dev i {
+  animation: glyph-blink 0.9s steps(1) infinite;
+}
+@keyframes glyph-type {
+  0% {
+    transform: scaleX(0);
+  }
+  30%,
+  80% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+@keyframes glyph-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.glyph-pub {
+  perspective: 220px;
+}
+.glyph-pub .page {
+  position: absolute;
+  top: 3px;
+  width: 27px;
+  height: 34px;
+  border: 1.5px solid color-mix(in oklab, var(--accent) 70%, transparent);
+  background: var(--card)
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 6px,
+      color-mix(in oklab, var(--foreground) 22%, transparent) 6px 7.5px
+    )
+    content-box;
+  padding: 5px 4px;
+}
+.glyph-pub .left {
+  left: 5px;
+  border-radius: 4px 1px 1px 4px;
+}
+.glyph-pub .right,
+.glyph-pub .flip {
+  left: 32px;
+  border-radius: 1px 4px 4px 1px;
+}
+.glyph-pub .flip {
+  transform-origin: left center;
+  backface-visibility: hidden;
+  background-color: color-mix(in oklab, var(--accent) 14%, var(--card));
+}
+.group:hover .glyph-pub .flip,
+.group:focus-visible .glyph-pub .flip,
+.is-active .glyph-pub .flip {
+  animation: glyph-flip 2.2s var(--ease-out) infinite;
+}
+@keyframes glyph-flip {
+  0%,
+  15% {
+    transform: rotateY(0);
+  }
+  60%,
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+.glyph-data {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-bottom: 2px;
+}
+.glyph-data span {
+  width: 8px;
+  border-radius: 2px 2px 1px 1px;
+  background: var(--accent);
+  opacity: 0.85;
+  transform-origin: bottom center;
+}
+.group:hover .glyph-data span,
+.group:focus-visible .glyph-data span,
+.is-active .glyph-data span {
+  animation: glyph-bar 0.9s ease-in-out infinite alternate;
+}
+@keyframes glyph-bar {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ------------------------------------------------------------------ Data pipeline */
+
+.pipeline-line {
+  position: absolute;
+  top: 23px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--border) 0 8px, transparent 8px 14px);
+}
+.pipeline-packet {
+  position: absolute;
+  top: 19px;
+  left: 12.5%;
+  z-index: 5;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent);
+  animation: pipeline-packet 3.2s linear infinite;
+}
+@keyframes pipeline-packet {
+  from {
+    left: 12.5%;
+  }
+  to {
+    left: calc(87.5% - 10px);
+  }
+}
+.pipeline-node {
+  animation: pipeline-node 3.2s ease-out infinite;
+}
+@keyframes pipeline-node {
+  0%,
+  100% {
+    transform: scale(1);
+    border-color: var(--border);
+  }
+  8% {
+    transform: scale(1.1);
+    border-color: var(--accent);
+  }
+  25% {
+    transform: scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------ Reveal (progressive enhancement)
+   `js-motion` is added by an inline script only when JS runs and motion is allowed.
+   The CSS fallback guarantees content becomes visible even if GSAP never loads. */
+
+.js-motion [data-reveal] {
+  opacity: 0;
+  animation: reveal-fallback 0s linear 2.5s forwards;
+}
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ View transitions */
+
+::view-transition-group(.morph) {
+  animation-duration: 450ms;
+  animation-timing-function: var(--ease-out);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+}
+
+/* ------------------------------------------------------------------ Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee {
+    mask-image: none;
+  }
+  .marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    flex-shrink: 1;
+  }
+  .marquee-track[aria-hidden="true"] {
+    display: none;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

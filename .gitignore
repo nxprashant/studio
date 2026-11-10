@@ -1,0 +1,40 @@
+# Allowlist approach: ignore everything at the root, then re-include
+# only what is needed to build and run the site.
+/*
+
+# --- Files needed to run the site ---
+!/.gitignore
+!/package.json
+!/package-lock.json
+!/next.config.ts
+!/tsconfig.json
+!/eslint.config.mjs
+!/README.md
+!/src/
+!/public/
+
+# --- Never commit, even inside allowed folders ---
+# Markdown docs (README.md at the root is kept above)
+*.md
+!/README.md
+
+# dependencies & build output
+node_modules
+.next
+out
+build
+coverage
+
+# misc
+.DS_Store
+*.pem
+.env*
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
